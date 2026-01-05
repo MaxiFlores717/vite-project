@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { ProductDetail } from "./ProductDetail";
 
-export const ProductGrid = ({ products = [] }) => {
+export const ProductGrid = ({ handlerRemove,  products = [] }) => {
 
     return (
         <table>
@@ -10,11 +10,13 @@ export const ProductGrid = ({ products = [] }) => {
                     <th>name</th>
                     <th>description</th>
                     <th>price</th>
+                    <th>remove</th>
+
                 </tr>
             </thead>
             <tbody>
                 {products.map(product => {
-                    return <ProductDetail product={product} key={product.name}></ProductDetail>
+                    return <ProductDetail handlerRemove={handlerRemove} product={product} key={product.name}></ProductDetail>
                 })}
 
             </tbody>

@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { listProduct } from "../services/ProductService";
 import { ProductGrid } from "./ProductGrid";
 import PropTypes from "prop-types";
+import { ProductForm } from "./ProductForm";
 
 
-export const ProductApp = ({title}) => {
+export const ProductApp = ({ title }) => {
 
     const [products, setProducts] = useState([]);
 
@@ -14,10 +15,29 @@ export const ProductApp = ({title}) => {
     }, []);
 
 
+    const handlerAddProduct = (product) =>{
+        console.log(product);
+        setProducts([...products, {...product}])
+    }
+
+    const handlerRemoveProduct = (name) =>{
+        console.log(name);
+        setProducts(products.filter(product => product.name != name))
+    }
+
     return (
-        <>
+        <div>
             <h1>{title}</h1>
-            <ProductGrid products={products} />
-        </>
+            <div>
+                <div>
+                    <ProductForm handlerAdd={handlerAddProduct}></ProductForm>
+
+                </div>
+                <div>
+                    <ProductGrid products={products} handlerRemove={handlerRemoveProduct }/>
+
+                </div>
+            </div>
+        </div>
     )
 }
