@@ -9,32 +9,59 @@ export const ProductApp = ({ title }) => {
 
     const [products, setProducts] = useState([]);
 
+    const [productSelected, setProductSelected] = useState({
+        id: 0,
+        name: '',
+        description: '',
+        price: ''
+    })
+
     useEffect(() => {
         const result = listProduct();
         setProducts(result);
     }, []);
 
 
-    const handlerAddProduct = (product) =>{
+    const handlerAddProduct = (product) => {
         console.log(product);
-        setProducts([...products, {...product}])
+
+        if (product.id > 0) {
+            setProducts(products.map(prod => {
+                if (prod.id == product.id) {
+                    return { ...product }
+                }
+                return prod;
+            }));
+        } else {
+            //simulando id
+            setProducts([...products, { ...product, id: new Date().getTime() }]);
+        }
+
     }
 
-    const handlerRemoveProduct = (name) =>{
-        console.log(name);
-        setProducts(products.filter(product => product.name != name))
+    const handlerRemoveProduct = (id) => {
+        console.log(id);
+        setProducts(products.filter(product => product.id != id))
+    }
+
+    const handlerProductSelected = (product) => {
+        setProductSelected({ ...product });
     }
 
     return (
-        <div>
-            <h1>{title}</h1>
-            <div>
-                <div>
-                    <ProductForm handlerAdd={handlerAddProduct}></ProductForm>
+        <div className="container my-4 ">
+            <h2>{title}</h2>
+            <div className="row">
+                <div className="col">
+                    <ProductForm handlerAdd={handlerAddProduct} productSelected={productSelected} ></ProductForm>
 
                 </div>
-                <div>
-                    <ProductGrid products={products} handlerRemove={handlerRemoveProduct }/>
+                <div className="col">
+                    {
+                        products.length > 0 ?  <ProductGrid products={products} handlerRemove={handlerRemoveProduct} handlerProductSelected={handlerProductSelected} />
+                            : <div className="alert alert-warning">No hay productos en el sistema!</div>
+                    }
+                   
 
                 </div>
             </div>
